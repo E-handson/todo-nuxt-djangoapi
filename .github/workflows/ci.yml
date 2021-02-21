@@ -49,3 +49,26 @@ jobs:
 
       - name: Run tests 🧪
         run: yarn test
+
+      - name: Setup Python 3.7 for awscli
+        uses: actions/setup-python@v1
+        with:
+          version: '3.7'
+          architecture: 'x64'
+
+      - name: Setup Python 3.7 for awscli
+        uses: actions/setup-python@v1
+        with:
+          version: '3.7'
+          architecture: 'x64'
+
+      - name: Build
+        run: |
+          yarn install
+          yarn generate
+
+      - name: Copy to s3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: aws s3 cp ./dist ${{ secrets.S3_PATH }} --recursive --acl public-read
